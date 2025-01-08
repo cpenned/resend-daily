@@ -70,7 +70,7 @@ export default function Home() {
       </div>
 
       <button
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50"
+        className="absolute bottom-4 uppercase text-sm font-bold px-4 py-2 bg-background text-foreground rounded-full left-1/2 -translate-x-1/2 z-50 tracking-wide"
         onClick={() => movePeople("people", "resetAll", "")}
       >
         reset
