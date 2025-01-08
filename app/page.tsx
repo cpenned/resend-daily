@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Particles } from "@/components/ui/particles";
 import useCollection from "@/hooks/useCollection";
 
@@ -11,33 +11,70 @@ export default function Home() {
   return (
     <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background gap-8 sm:gap-16">
       <div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative">
-          {documents.future.map((doc) => (
-            <button key={doc.id} className="size-12 sm:size-24 rounded-full opacity-70 hover:opacity-100 transition-opacity" title={doc.name} aria-label={doc.name} onClick={() => movePeople("people", "markActive", doc.id)}>
-              <Image src={`/${doc.name.toLowerCase()}.png`} width={100} height={100} alt="" className="rounded-full border-2 border-slate-600" />
-            </button>
-          ))}
-      </div>
-
-
-        <div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative">
-          {documents.active.map((doc) => (
-            <button key={doc.id} className="size-24 sm:size-48 rounded-full opacity-100 hover:opacity-100 transition-opacity ring-8 animate-pulseScale" title={doc.name} aria-label={doc.name} onClick={() => movePeople("people", "markDone", doc.id)}>
-                <Image src={`/${doc.name.toLowerCase()}.png`} width={192} height={192} alt="" className="rounded-full border-2 border-slate-600" />
-              </button>
-          ))}
-
-        </div>
-
-
-      <div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative">
-        {documents.done.map((doc) => (
-          <div key={doc.id} className="size-12 sm:size-24 rounded-full opacity-20" title={doc.name} aria-label={doc.name}>
-              <Image src={`/${doc.name.toLowerCase()}.png`} width={100} height={100} alt="" className="rounded-full border-2 border-slate-600" />
-            </div>
+        {documents.future.map((doc) => (
+          <button
+            key={doc.id}
+            className="size-12 sm:size-24 rounded-full opacity-70 hover:opacity-100 transition-opacity"
+            title={doc.name}
+            aria-label={doc.name}
+            onClick={() => movePeople("people", "markActive", doc.id)}
+          >
+            <Image
+              src={`/${doc.name.toLowerCase()}.png`}
+              width={100}
+              height={100}
+              alt=""
+              className="rounded-full border-2 border-slate-600"
+            />
+          </button>
         ))}
       </div>
 
-        <button className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50" onClick={() => movePeople("people", "resetAll", "")}>reset</button>
+      <div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative">
+        {documents.active.map((doc) => (
+          <button
+            key={doc.id}
+            className="size-24 sm:size-48 rounded-full opacity-100 hover:opacity-100 transition-opacity ring-8 animate-pulseScale"
+            title={doc.name}
+            aria-label={doc.name}
+            onClick={() => movePeople("people", "markDone", doc.id)}
+          >
+            <Image
+              src={`/${doc.name.toLowerCase()}.png`}
+              width={192}
+              height={192}
+              alt=""
+              className="rounded-full border-2 border-slate-600"
+            />
+          </button>
+        ))}
+      </div>
+
+      <div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative">
+        {documents.done.map((doc) => (
+          <div
+            key={doc.id}
+            className="size-12 sm:size-24 rounded-full opacity-20"
+            title={doc.name}
+            aria-label={doc.name}
+          >
+            <Image
+              src={`/${doc.name.toLowerCase()}.png`}
+              width={100}
+              height={100}
+              alt=""
+              className="rounded-full border-2 border-slate-600"
+            />
+          </div>
+        ))}
+      </div>
+
+      <button
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50"
+        onClick={() => movePeople("people", "resetAll", "")}
+      >
+        reset
+      </button>
       <Particles
         className="absolute inset-0"
         quantity={100}
@@ -46,5 +83,5 @@ export default function Home() {
         refresh
       />
     </div>
-  )
+  );
 }
