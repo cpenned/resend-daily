@@ -4,9 +4,29 @@ import useCollection from "@/hooks/useCollection";
 
 import Image from "next/image";
 import { movePeople } from "./actions";
+import { useEffect } from "react";
 
 export default function Home() {
 	const { documents } = useCollection("people");
+
+	useEffect(() => {
+		const handleKeyPress = (event: KeyboardEvent) => {
+			if (event.key.toLowerCase() === "n" && documents.future.length > 0) {
+				const randomIndex = Math.floor(Math.random() * documents.future.length);
+				const randomPerson = documents.future[randomIndex];
+				movePeople("people", "markActive", randomPerson.id);
+			}
+			if (
+				event.key.toLocaleLowerCase() === "r" &&
+				documents.future.length === 0
+			) {
+				movePeople("people", "resetAll", "");
+			}
+		};
+
+		window.addEventListener("keydown", handleKeyPress);
+		return () => window.removeEventListener("keydown", handleKeyPress);
+	}, [documents.future]);
 
 	return (
 		<div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background gap-8 sm:gap-16">
@@ -74,7 +94,7 @@ export default function Home() {
 			{documents.future.length > 0 ? (
 				<button
 					type="button"
-					className="uppercase text-lg font-bold px-4 py-2 bg-background text-foreground tracking-wide"
+					className="uppercase text-lg font-bold px-4 py-2 bg-background text-foreground tracking-wide flex items-center gap-2"
 					onClick={() => {
 						const randomIndex = Math.floor(
 							Math.random() * documents.future.length,
@@ -83,15 +103,21 @@ export default function Home() {
 						movePeople("people", "markActive", randomPerson.id);
 					}}
 				>
-					Next
+					<span>Next</span>
+					<strong className="lowercase p-2 rounded-md border size-9 leading-none grid place-items-center">
+						n
+					</strong>
 				</button>
 			) : (
 				<button
 					type="button"
-					className="uppercase text-sm font-bold px-4 py-2 bg-background text-foreground rounded-full tracking-wide"
+					className="uppercase text-lg font-bold px-4 py-2 bg-background text-foreground tracking-wide flex items-center gap-2"
 					onClick={() => movePeople("people", "resetAll", "")}
 				>
-					reset
+					<span>Reset</span>
+					<strong className="lowercase p-2 rounded-md border size-9 leading-none grid place-items-center">
+						r
+					</strong>
 				</button>
 			)}
 
