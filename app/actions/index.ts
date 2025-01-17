@@ -2,20 +2,40 @@
 // useCollection.ts
 import { db } from "@/lib/firebase/config";
 import {
+	arrayRemove,
+	arrayUnion,
 	collection,
 	doc,
+	getDoc,
 	getDocs,
 	query,
 	updateDoc,
 	where,
+	setDoc,
 } from "firebase/firestore";
 
 export const movePeople = async (
 	collectionName: string,
-	action: "resetAll" | "markDone" | "markActive",
+	action: "resetAll" | "markDone" | "markActive" | "back",
 	id: string,
 ) => {
 	const collectionRef = collection(db, collectionName);
+
+	if (action === "back") {
+		await updateDoc(doc(db, collectionName, id), {
+			status: "future",
+		});
+		await updateDoc(doc(db, "cue", "order"), {
+			order: arrayRemove(id),
+		});
+		const lastItem = (await getDoc(doc(db, "cue", "order"))).data()?.order;
+		if (lastItem.length > 0) {
+			const lastItemId = lastItem[lastItem.length - 1];
+			await updateDoc(doc(db, collectionName, lastItemId), {
+				status: "active",
+			});
+		}
+	}
 
 	if (action === "markActive") {
 		const q = query(collectionRef, where("status", "==", "active"));
@@ -30,6 +50,10 @@ export const movePeople = async (
 		await updateDoc(doc(db, collectionName, id), {
 			status: "active",
 		});
+
+		await updateDoc(doc(db, "cue", "order"), {
+			order: arrayUnion(id),
+		});
 	}
 
 	if (action === "resetAll") {
@@ -39,6 +63,9 @@ export const movePeople = async (
 				status: "future",
 			});
 		}
+		await updateDoc(doc(db, "cue", "order"), {
+			order: [],
+		});
 	}
 
 	if (action === "markDone") {
@@ -51,3 +78,8 @@ export const movePeople = async (
 		}
 	}
 };
+
+// Initialize the order document (run this once when setting up)
+await setDoc(doc(db, "cue", "order"), {
+	order: [],
+});

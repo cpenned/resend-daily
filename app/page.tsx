@@ -17,16 +17,23 @@ export default function Home() {
 				movePeople("people", "markActive", randomPerson.id);
 			}
 			if (
-				event.key.toLocaleLowerCase() === "r" &&
-				documents.future.length === 0
+				event.key.toLowerCase() === "b" &&
+				documents.done.length > 0 &&
+				documents.active.length > 0
 			) {
+				movePeople("people", "back", documents.active.map((doc) => doc.id)[0]);
+			}
+			if (event.key.toLowerCase() === "r" && documents.future.length === 0) {
+				movePeople("people", "resetAll", "");
+			}
+			if (event.key === "®") {
 				movePeople("people", "resetAll", "");
 			}
 		};
 
 		window.addEventListener("keydown", handleKeyPress);
 		return () => window.removeEventListener("keydown", handleKeyPress);
-	}, [documents.future]);
+	}, [documents.future, documents.active, documents.done]);
 
 	return (
 		<div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background gap-8 sm:gap-16">
@@ -51,7 +58,7 @@ export default function Home() {
 				))}
 			</div>
 
-			<div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative">
+			<div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative size-24 sm:size-48">
 				{documents.active.map((doc) => (
 					<button
 						type="button"
@@ -92,22 +99,45 @@ export default function Home() {
 			</div>
 
 			{documents.future.length > 0 ? (
-				<button
-					type="button"
-					className="uppercase text-lg font-bold px-4 py-2 bg-background text-foreground tracking-wide flex items-center gap-2"
-					onClick={() => {
-						const randomIndex = Math.floor(
-							Math.random() * documents.future.length,
-						);
-						const randomPerson = documents.future[randomIndex];
-						movePeople("people", "markActive", randomPerson.id);
-					}}
-				>
-					<span>Next</span>
-					<strong className="lowercase p-2 rounded-md border size-9 leading-none grid place-items-center">
-						n
-					</strong>
-				</button>
+				<div className="flex gap-4 items-center">
+					{documents.done.length > 0 && (
+						<button
+							type="button"
+							className="uppercase text-lg font-bold px-4 py-2 bg-background text-foreground tracking-wide flex items-center gap-2 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
+							onClick={() => {
+								if (documents.active.length > 0) {
+									movePeople(
+										"people",
+										"back",
+										documents.active.map((doc) => doc.id)[0],
+									);
+								}
+							}}
+						>
+							<span>Back</span>
+							<strong className="lowercase p-2 rounded-md border size-9 leading-none grid place-items-center">
+								b
+							</strong>
+						</button>
+					)}
+
+					<button
+						type="button"
+						className="uppercase text-lg font-bold px-4 py-2 text-background tracking-wide flex items-center gap-2 bg-foreground rounded-md hover:bg-foreground/80 transition-opacity"
+						onClick={() => {
+							const randomIndex = Math.floor(
+								Math.random() * documents.future.length,
+							);
+							const randomPerson = documents.future[randomIndex];
+							movePeople("people", "markActive", randomPerson.id);
+						}}
+					>
+						<span>Next</span>
+						<strong className="lowercase p-2 rounded-md border size-9 leading-none grid place-items-center">
+							n
+						</strong>
+					</button>
+				</div>
 			) : (
 				<button
 					type="button"
