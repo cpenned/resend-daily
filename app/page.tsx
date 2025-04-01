@@ -1,20 +1,40 @@
 "use client";
-import { Particles } from "@/components/ui/particles";
-import useCollection from "@/hooks/useCollection";
+import useCollection from "@/app/hooks/useCollection";
 
 import Image from "next/image";
 import { movePeople } from "./actions";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 export default function Home() {
 	const { documents } = useCollection("people");
 
+	const setNextPerson = useCallback(() => {
+		const randomIndex = () =>
+			Math.floor(Math.random() * documents.future.length);
+		if (documents.upNext.length > 1) {
+			movePeople("people", "markActive", documents.upNext[0].id);
+			return movePeople("people", "markUpNext", documents.upNext[1].id);
+		}
+		if (documents.future.length === 1) {
+			movePeople("people", "markActive", documents.upNext[0].id);
+			return movePeople("people", "markUpNext", documents.future[0].id);
+		}
+		if (documents.upNext.length === 1 && documents.future.length === 0) {
+			return movePeople("people", "markActive", documents.upNext[0].id);
+		}
+		if (documents.upNext.length === 0) {
+			movePeople("people", "markActive", documents.future[randomIndex()].id);
+			movePeople("people", "markUpNext", documents.future[randomIndex()].id);
+		} else {
+			movePeople("people", "markActive", documents.upNext[0].id);
+			movePeople("people", "markUpNext", documents.future[randomIndex()].id);
+		}
+	}, [documents.future, documents.upNext]);
+
 	useEffect(() => {
 		const handleKeyPress = (event: KeyboardEvent) => {
 			if (event.key.toLowerCase() === "n" && documents.future.length > 0) {
-				const randomIndex = Math.floor(Math.random() * documents.future.length);
-				const randomPerson = documents.future[randomIndex];
-				movePeople("people", "markActive", randomPerson.id);
+				setNextPerson();
 			}
 			if (
 				event.key.toLowerCase() === "b" &&
@@ -30,14 +50,13 @@ export default function Home() {
 				movePeople("people", "resetAll", "");
 			}
 		};
-
 		window.addEventListener("keydown", handleKeyPress);
 		return () => window.removeEventListener("keydown", handleKeyPress);
-	}, [documents.future, documents.active, documents.done]);
+	}, [documents, setNextPerson]);
 
 	return (
-		<div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background gap-8 sm:gap-16">
-			<div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative">
+		<div className="relative grid grid-rows-[1fr_2fr_1fr_30px] py-20 h-screen w-full place-items-center overflow-hidden rounded-lg border bg-background gap-8 sm:gap-16">
+			<div className="flex max-w-5xl gap-2 flex-wrap justify-center z-50 relative">
 				{documents.future.map((doc) => (
 					<button
 						type="button"
@@ -58,39 +77,64 @@ export default function Home() {
 				))}
 			</div>
 
-			<div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative size-24 sm:size-48">
-				{documents.active.map((doc) => (
-					<button
-						type="button"
-						key={doc.id}
-						className="size-24 sm:size-48 rounded-full opacity-100 hover:opacity-100 transition-opacity ring-8 animate-pulseScale"
-						title={doc.name}
-						aria-label={doc.name}
-						onClick={() => movePeople("people", "markDone", doc.id)}
-					>
-						<Image
-							src={`/${doc.name.toLowerCase()}.png`}
-							width={192}
-							height={192}
-							alt=""
-							className="rounded-full border-2 border-slate-600"
-						/>
-					</button>
-				))}
+			<div className="grid gap-4 place-items-center">
+				<div
+					className={`z-50 relative size-12 sm:size-24 grid gap-2 items-start justify-center ${
+						documents.upNext.length > 0 ? "opacity-100" : "opacity-0"
+					}`}
+				>
+					<p className="text-sm text-foreground/50 uppercase font-bold text-center">
+						Up Next
+					</p>
+					{documents.upNext.map((doc) => (
+						<div
+							key={doc.id}
+							className="size-16 sm:size-20 rounded-full opacity-60"
+						>
+							<Image
+								src={`/${doc.name.toLowerCase()}.png`}
+								width={80}
+								height={80}
+								alt=""
+								className="rounded-full size-16 sm:size-20"
+							/>
+						</div>
+					))}
+				</div>
+				<div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative size-24 sm:size-48">
+					{documents.active.map((doc) => (
+						<button
+							type="button"
+							key={doc.id}
+							className="size-24 sm:size-48 rounded-full opacity-100 hover:opacity-100 transition-opacity ring-8 animate-pulseScale"
+							title={doc.name}
+							aria-label={doc.name}
+							onClick={() => movePeople("people", "markDone", doc.id)}
+						>
+							<Image
+								src={`/${doc.name.toLowerCase()}.png`}
+								width={192}
+								height={192}
+								alt=""
+								className="rounded-full border-2 border-slate-600"
+							/>
+						</button>
+					))}
+				</div>
 			</div>
 
-			<div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative">
+			<div className="flex max-w-5xl gap-2 flex-wrap justify-center z-50 relative">
 				{documents.done.map((doc) => (
 					<div
 						key={doc.id}
-						className="size-12 sm:size-24 rounded-full opacity-20"
+						className="size-12 sm:size-14 rounded-full opacity-20"
 						title={doc.name}
 						aria-label={doc.name}
 					>
 						<Image
 							src={`/${doc.name.toLowerCase()}.png`}
-							width={100}
-							height={100}
+							width={60}
+							height={60}
 							alt=""
 							className="rounded-full border-2 border-slate-600"
 						/>
@@ -98,66 +142,53 @@ export default function Home() {
 				))}
 			</div>
 
-			{documents.future.length > 0 ? (
-				<div className="flex gap-4 items-center">
-					{documents.done.length > 0 && (
+			<div>
+				{documents.future.length > 0 || documents.upNext.length > 0 ? (
+					<div className="flex gap-4 items-center">
+						{documents.done.length > 0 && (
+							<button
+								type="button"
+								className="uppercase text-lg font-bold px-4 py-2 bg-background text-foreground tracking-wide flex items-center gap-2 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
+								onClick={() => {
+									if (documents.active.length > 0) {
+										movePeople(
+											"people",
+											"back",
+											documents.active.map((doc) => doc.id)[0],
+										);
+									}
+								}}
+							>
+								<span>Back</span>
+								<strong className="lowercase p-2 rounded-md border size-9 leading-none grid place-items-center">
+									b
+								</strong>
+							</button>
+						)}
 						<button
 							type="button"
-							className="uppercase text-lg font-bold px-4 py-2 bg-background text-foreground tracking-wide flex items-center gap-2 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
-							onClick={() => {
-								if (documents.active.length > 0) {
-									movePeople(
-										"people",
-										"back",
-										documents.active.map((doc) => doc.id)[0],
-									);
-								}
-							}}
+							className="uppercase text-lg font-bold px-4 py-2 text-background tracking-wide flex items-center gap-2 bg-foreground rounded-md hover:bg-foreground/80 transition-opacity"
+							onClick={setNextPerson}
 						>
-							<span>Back</span>
+							<span>Next</span>
 							<strong className="lowercase p-2 rounded-md border size-9 leading-none grid place-items-center">
-								b
+								n
 							</strong>
 						</button>
-					)}
-
+					</div>
+				) : (
 					<button
 						type="button"
-						className="uppercase text-lg font-bold px-4 py-2 text-background tracking-wide flex items-center gap-2 bg-foreground rounded-md hover:bg-foreground/80 transition-opacity"
-						onClick={() => {
-							const randomIndex = Math.floor(
-								Math.random() * documents.future.length,
-							);
-							const randomPerson = documents.future[randomIndex];
-							movePeople("people", "markActive", randomPerson.id);
-						}}
+						className="uppercase text-lg font-bold px-4 py-2 bg-background text-foreground tracking-wide flex items-center gap-2"
+						onClick={() => movePeople("people", "resetAll", "")}
 					>
-						<span>Next</span>
+						<span>Reset</span>
 						<strong className="lowercase p-2 rounded-md border size-9 leading-none grid place-items-center">
-							n
+							r
 						</strong>
 					</button>
-				</div>
-			) : (
-				<button
-					type="button"
-					className="uppercase text-lg font-bold px-4 py-2 bg-background text-foreground tracking-wide flex items-center gap-2"
-					onClick={() => movePeople("people", "resetAll", "")}
-				>
-					<span>Reset</span>
-					<strong className="lowercase p-2 rounded-md border size-9 leading-none grid place-items-center">
-						r
-					</strong>
-				</button>
-			)}
-
-			<Particles
-				className="absolute inset-0"
-				quantity={100}
-				ease={80}
-				color="#000"
-				refresh
-			/>
+				)}
+			</div>
 		</div>
 	);
 }

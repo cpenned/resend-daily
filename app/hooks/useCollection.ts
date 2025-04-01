@@ -2,16 +2,18 @@
 import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import type { QuerySnapshot, DocumentData } from "firebase/firestore";
-import { db } from "@/lib/firebase/config";
+import { db } from "@/app/firebase/config";
 
 const useCollection = (collectionName: string) => {
 	const [documents, setDocuments] = useState<{
 		future: DocumentData[];
 		active: DocumentData[];
+		upNext: DocumentData[];
 		done: DocumentData[];
 	}>({
 		future: [],
 		active: [],
+		upNext: [],
 		done: [],
 	});
 	const [error, setError] = useState<string | null>(null);
@@ -31,6 +33,7 @@ const useCollection = (collectionName: string) => {
 					future: docs.filter((doc) => doc.status === "future"),
 					active: docs.filter((doc) => doc.status === "active"),
 					done: docs.filter((doc) => doc.status === "done"),
+					upNext: docs.filter((doc) => doc.status === "upNext"),
 				};
 				setDocuments(sortedDocs);
 				setError(null);

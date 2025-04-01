@@ -1,6 +1,6 @@
 "use server";
 // useCollection.ts
-import { db } from "@/lib/firebase/config";
+import { db } from "@/app/firebase/config";
 import {
 	arrayRemove,
 	arrayUnion,
@@ -16,7 +16,7 @@ import {
 
 export const movePeople = async (
 	collectionName: string,
-	action: "resetAll" | "markDone" | "markActive" | "back",
+	action: "resetAll" | "markDone" | "markActive" | "back" | "markUpNext",
 	id: string,
 ) => {
 	const collectionRef = collection(db, collectionName);
@@ -35,6 +35,15 @@ export const movePeople = async (
 				status: "active",
 			});
 		}
+	}
+
+	if (action === "markUpNext") {
+		await updateDoc(doc(db, collectionName, id), {
+			status: "upNext",
+		});
+		await updateDoc(doc(db, "cue", "order"), {
+			order: arrayUnion(id),
+		});
 	}
 
 	if (action === "markActive") {
