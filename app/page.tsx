@@ -88,22 +88,24 @@ export default function Home() {
 					}`}
 				>
 					<p className="text-sm text-foreground/50 uppercase font-bold text-center">
-						On Deck: {documents.upNext[0].name}
+						On Deck:{" "}
+						{documents.upNext.length > 0 ? documents.upNext[0].name : "None"}
 					</p>
-
-					<div
-						className="size-16 sm:size-20 rounded-full opacity-60"
-						title={documents.upNext[0].name}
-						aria-label={documents.upNext[0].name}
-					>
-						<Image
-							src={`/${documents.upNext[0].name.toLowerCase()}.png`}
-							width={80}
-							height={80}
-							alt=""
-							className="rounded-full size-16 sm:size-20"
-						/>
-					</div>
+					{documents.upNext.length > 0 && (
+						<div
+							className="size-16 sm:size-20 rounded-full opacity-60"
+							title={documents.upNext[0].name}
+							aria-label={documents.upNext[0].name}
+						>
+							<Image
+								src={`/${documents.upNext[0].name.toLowerCase()}.png`}
+								width={80}
+								height={80}
+								alt=""
+								className="rounded-full size-16 sm:size-20"
+							/>
+						</div>
+					)}
 				</div>
 				<div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative size-24 sm:size-48">
 					{documents.active.map((doc) => (
