@@ -90,13 +90,9 @@ export const movePeople = async (
 	}
 
 	if (action === "markDone") {
-		const q = query(collectionRef, where("status", "==", "active"));
-		const querySnapshot = await getDocs(q);
-		for (const doc of querySnapshot.docs) {
-			await updateDoc(doc.ref, {
-				status: "done",
-			});
-		}
+		await updateDoc(doc(db, collectionName, id), {
+			status: "done",
+		});
 	}
 };
 
