@@ -16,10 +16,22 @@ import {
 
 export const movePeople = async (
 	collectionName: string,
-	action: "resetAll" | "markDone" | "markActive" | "back" | "markUpNext",
+	action:
+		| "resetAll"
+		| "markDone"
+		| "markActive"
+		| "back"
+		| "markUpNext"
+		| "markFuture",
 	id: string,
 ) => {
 	const collectionRef = collection(db, collectionName);
+
+	if (action === "markFuture") {
+		await updateDoc(doc(db, collectionName, id), {
+			status: "future",
+		});
+	}
 
 	if (action === "back") {
 		await updateDoc(doc(db, collectionName, id), {

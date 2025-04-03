@@ -65,6 +65,10 @@ export default function Home() {
 						title={doc.name}
 						aria-label={doc.name}
 						onClick={() => movePeople("people", "markActive", doc.id)}
+						onContextMenu={(e) => {
+							e.preventDefault();
+							movePeople("people", "markDone", doc.id);
+						}}
 					>
 						<Image
 							src={`/${doc.name.toLowerCase()}.png`}
@@ -84,22 +88,22 @@ export default function Home() {
 					}`}
 				>
 					<p className="text-sm text-foreground/50 uppercase font-bold text-center">
-						Up Next
+						On Deck: {documents.upNext[0].name}
 					</p>
-					{documents.upNext.map((doc) => (
-						<div
-							key={doc.id}
-							className="size-16 sm:size-20 rounded-full opacity-60"
-						>
-							<Image
-								src={`/${doc.name.toLowerCase()}.png`}
-								width={80}
-								height={80}
-								alt=""
-								className="rounded-full size-16 sm:size-20"
-							/>
-						</div>
-					))}
+
+					<div
+						className="size-16 sm:size-20 rounded-full opacity-60"
+						title={documents.upNext[0].name}
+						aria-label={documents.upNext[0].name}
+					>
+						<Image
+							src={`/${documents.upNext[0].name.toLowerCase()}.png`}
+							width={80}
+							height={80}
+							alt=""
+							className="rounded-full size-16 sm:size-20"
+						/>
+					</div>
 				</div>
 				<div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative size-24 sm:size-48">
 					{documents.active.map((doc) => (
@@ -130,6 +134,10 @@ export default function Home() {
 						className="size-12 sm:size-14 rounded-full opacity-20"
 						title={doc.name}
 						aria-label={doc.name}
+						onContextMenu={(e) => {
+							e.preventDefault();
+							movePeople("people", "markFuture", doc.id);
+						}}
 					>
 						<Image
 							src={`/${doc.name.toLowerCase()}.png`}
