@@ -55,13 +55,13 @@ export default function Home() {
 	}, [documents, setNextPerson]);
 
 	return (
-		<div className="relative grid grid-rows-[1fr_2fr_1fr_30px] py-20 h-screen w-full place-items-center overflow-hidden rounded-lg border bg-background gap-8 sm:gap-16">
-			<div className="flex max-w-5xl gap-2 flex-wrap justify-center z-50 relative">
+		<div className="relative grid grid-rows-[1fr_2fr_1fr_30px] py-12 h-screen w-full place-items-center overflow-hidden rounded-lg border bg-background gap-8 sm:gap-16">
+			<div className="flex max-w-7xl gap-2 flex-wrap justify-center z-50 relative">
 				{documents.future.map((doc) => (
 					<button
 						type="button"
 						key={doc.id}
-						className="size-12 sm:size-24 rounded-full opacity-70 hover:opacity-100 transition-opacity"
+						className="size-10 sm:size-12 rounded-full opacity-70 hover:opacity-100 hover:scale-150 transition-all hover:z-50"
 						title={doc.name}
 						aria-label={doc.name}
 						onClick={() => movePeople("people", "markActive", doc.id)}
@@ -81,50 +81,60 @@ export default function Home() {
 				))}
 			</div>
 
-			<div className="grid gap-4 place-items-center">
+			<div className="grid gap-16 place-items-center grid-cols-2">
 				<div
-					className={`z-50 relative size-12 sm:size-24 grid gap-2 items-start justify-center ${
+					className={`z-50 relative grid gap-2 place-items-center ${
 						documents.upNext.length > 0 ? "opacity-100" : "opacity-0"
 					}`}
 				>
-					<p className="text-sm text-foreground/50 uppercase font-bold text-center">
-						On Deck:{" "}
-						{documents.upNext.length > 0 ? documents.upNext[0].name : "None"}
+					<p className="text-sm text-foreground/50 uppercase font-bold text-center grid">
+						Who&apos;s next{" "}
+						<span className="text-foreground font-bold text-4xl">
+							{documents.upNext.length > 0 ? documents.upNext[0].name : "None"}
+						</span>
 					</p>
 					{documents.upNext.length > 0 && (
 						<div
-							className="size-16 sm:size-20 rounded-full opacity-60"
+							className="size-24 sm:size-64 rounded-full opacity-30"
 							title={documents.upNext[0].name}
 							aria-label={documents.upNext[0].name}
 						>
 							<Image
 								src={`/${documents.upNext[0].name.toLowerCase()}.png`}
-								width={80}
-								height={80}
+								width={256}
+								height={256}
 								alt=""
-								className="rounded-full size-16 sm:size-20"
+								className="rounded-full size-24 sm:size-64 "
 							/>
 						</div>
 					)}
 				</div>
-				<div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative size-24 sm:size-48">
+				<div className="flex max-w-xl gap-2 flex-wrap justify-center z-50 relative">
 					{documents.active.map((doc) => (
-						<button
-							type="button"
-							key={doc.id}
-							className="size-24 sm:size-48 rounded-full opacity-100 hover:opacity-100 transition-opacity ring-8 animate-pulseScale"
-							title={doc.name}
-							aria-label={doc.name}
-							onClick={() => movePeople("people", "markDone", doc.id)}
-						>
-							<Image
-								src={`/${doc.name.toLowerCase()}.png`}
-								width={192}
-								height={192}
-								alt=""
-								className="rounded-full border-2 border-slate-600"
-							/>
-						</button>
+						<div className="grid gap-4" key={doc.id}>
+							<p className="text-sm text-foreground/50 uppercase font-bold text-center grid">
+								Speaker
+								<span className="text-foreground font-bold text-4xl">
+									{doc.name}
+								</span>
+							</p>
+							<button
+								type="button"
+								key={doc.id}
+								className="size-24 sm:size-64 rounded-full opacity-100 hover:opacity-100 transition-opacity ring-8"
+								title={doc.name}
+								aria-label={doc.name}
+								onClick={() => movePeople("people", "markDone", doc.id)}
+							>
+								<Image
+									src={`/${doc.name.toLowerCase()}.png`}
+									width={256}
+									height={256}
+									alt=""
+									className="rounded-full border-2 border-slate-600"
+								/>
+							</button>
+						</div>
 					))}
 				</div>
 			</div>
