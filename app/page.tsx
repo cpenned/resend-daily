@@ -55,7 +55,9 @@ export default function Home() {
 	}, [documents, setNextPerson]);
 
 	return (
-		<div className="relative grid grid-rows-[1fr_2fr_1fr_30px] py-12 h-screen w-full place-items-center overflow-hidden rounded-lg border bg-background gap-8 sm:gap-16">
+		<div
+			className={`relative grid grid-rows-[1fr_2fr_1fr_30px] py-12 h-screen w-full place-items-center overflow-hidden rounded-lg border bg-background gap-8 sm:gap-16 ${documents.active.length && documents.active[0].name === "Bu" ? "dark" : null}`}
+		>
 			<div className="flex max-w-7xl gap-2 flex-wrap justify-center z-50 relative">
 				{documents.future.map((doc) => (
 					<button
@@ -168,7 +170,7 @@ export default function Home() {
 						{documents.done.length > 0 && (
 							<button
 								type="button"
-								className="uppercase text-lg font-bold px-4 py-2 bg-background text-foreground tracking-wide flex items-center gap-2 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
+								className="uppercase text-lg font-bold px-4 py-2 bg-background text-foreground tracking-wide flex items-center gap-2 rounded-md hover:bg-foreground hover:text-background transition-colors"
 								onClick={() => {
 									if (documents.active.length > 0) {
 										movePeople(
