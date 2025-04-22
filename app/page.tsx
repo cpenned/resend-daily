@@ -5,6 +5,12 @@ import Image from "next/image";
 import { movePeople } from "./actions";
 import { useCallback, useEffect } from "react";
 
+const theme = {
+	Bu: "dark",
+	Jonni: "purple",
+	Cassio: "dracula",
+	Anna: "rainbow",
+};
 export default function Home() {
 	const { documents } = useCollection("people");
 
@@ -56,7 +62,12 @@ export default function Home() {
 
 	return (
 		<div
-			className={`relative grid grid-rows-[1fr_2fr_1fr_30px] py-12 h-screen w-full place-items-center overflow-hidden rounded-lg border bg-background gap-8 sm:gap-16 ${documents.active.length && documents.active[0].name === "Bu" ? "dark" : null}`}
+			className={`relative grid grid-rows-[1fr_2fr_1fr_30px] py-12 h-screen w-full place-items-center overflow-hidden rounded-lg border bg-background gap-8 sm:gap-16 ${
+				documents.active.length &&
+				theme[documents.active[0].name as keyof typeof theme]
+					? theme[documents.active[0].name as keyof typeof theme]
+					: null
+			}`}
 		>
 			<div className="flex max-w-7xl gap-2 flex-wrap justify-center z-50 relative">
 				{documents.future.map((doc) => (
@@ -77,7 +88,7 @@ export default function Home() {
 							width={100}
 							height={100}
 							alt=""
-							className="rounded-full border-2 border-slate-600"
+							className="rounded-full border-2 border-chart-1"
 						/>
 					</button>
 				))}
@@ -123,7 +134,7 @@ export default function Home() {
 							<button
 								type="button"
 								key={doc.id}
-								className="size-24 sm:size-64 rounded-full opacity-100 hover:opacity-100 transition-opacity ring-8"
+								className="size-24 sm:size-64 rounded-full opacity-100 hover:opacity-100 transition-opacity ring-8 ring-chart-2"
 								title={doc.name}
 								aria-label={doc.name}
 								onClick={() => movePeople("people", "markDone", doc.id)}
@@ -133,7 +144,7 @@ export default function Home() {
 									width={256}
 									height={256}
 									alt=""
-									className="rounded-full border-2 border-slate-600"
+									className="rounded-full border-2 border-chart-1"
 								/>
 							</button>
 						</div>
@@ -158,7 +169,7 @@ export default function Home() {
 							width={60}
 							height={60}
 							alt=""
-							className="rounded-full border-2 border-slate-600"
+							className="rounded-full border-2 border-chart-1"
 						/>
 					</div>
 				))}
