@@ -42,11 +42,18 @@ export default {
 			},
 			animation: {
 				pulseScale: "pulseScale 15s ease-in-out infinite",
+				down: "down 1s ease-in-out forwards",
 			},
 			keyframes: {
 				pulseScale: {
 					"0%, 100%": { transform: "scale(1)" },
 					"50%": { transform: "scale(1.15)" },
+				},
+				down: {
+					"0%": { transform: "translateY(0) rotate(0deg)" },
+					"100%": {
+						transform: "translateY(22px) translateX(3px) rotate(-8deg)",
+					},
 				},
 			},
 		},

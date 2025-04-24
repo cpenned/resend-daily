@@ -14,10 +14,10 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
-		"firebase": "^11.6.0",
 		"lucide-react": "^0.469.0",
 		"next": "15.1.4",
 		"react": "^19.1.0",
+		"react-confetti-boom": "^1.1.2",
 		"react-dom": "^19.1.0"
 	},
 	"devDependencies": {
