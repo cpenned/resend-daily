@@ -10,11 +10,18 @@ import glasses from "./glasses.png";
 import jazz from "./jazz.webp";
 
 const theme = {
-	Bu: "dark",
-	Jonni: "purple",
-	Cassio: "dracula",
-	Anna: "rainbow",
+	bu: "dark",
+	jonni: "purple",
+	cassio: "dracula",
+	anna: "rainbow",
 };
+
+const jonniQuotes = [
+	"it's all good",
+	"all good in the hood",
+	"It's a good day",
+	"It's another good day",
+];
 
 export default function Home() {
 	const { documents, setNextPerson, markDone, markFuture, markActive } =
@@ -44,12 +51,18 @@ export default function Home() {
 			<div
 				className={`relative grid grid-rows-[1fr_2fr_1fr_30px] py-12 h-screen w-full place-items-center overflow-hidden rounded-lg border bg-background gap-8 sm:gap-16 ${
 					documents.active.length &&
-					theme[documents.active[0].first_name as keyof typeof theme]
-						? theme[documents.active[0].first_name as keyof typeof theme]
+					theme[
+						documents.active[0].first_name.toLowerCase() as keyof typeof theme
+					]
+						? theme[
+								documents.active[0].first_name.toLowerCase() as keyof typeof theme
+							]
 						: null
 				}`}
 			>
-				{documents.upNext.length === 0 && documents.done.length > 0 ? (
+				{documents.upNext.length === 0 &&
+				documents.done.length > 0 &&
+				documents.active.length === 1 ? (
 					<Confetti mode="fall" particleCount={500} />
 				) : null}
 				<div className="flex max-w-7xl gap-2 flex-wrap justify-center z-50 relative">
@@ -112,9 +125,9 @@ export default function Home() {
 									{documents.upNext.length === 0
 										? "The Closer™"
 										: doc.first_name === "Jonni"
-											? Math.random() < 0.5
-												? "it's all good"
-												: "all good in the hood"
+											? jonniQuotes[
+													Math.floor(Math.random() * jonniQuotes.length)
+												]
 											: "Speaker"}
 									<span className="text-foreground font-bold text-4xl">
 										{doc.first_name}
@@ -123,7 +136,9 @@ export default function Home() {
 								<button
 									type="button"
 									key={doc.id}
-									className="size-24 sm:size-64 rounded-full opacity-100 hover:opacity-100 transition-opacity ring-8 ring-chart-2 relative"
+									className={
+										"size-24 sm:size-64 rounded-full opacity-100 hover:opacity-100 transition-opacity ring-8 ring-chart-2 relative"
+									}
 									title={doc.first_name}
 									aria-label={doc.first_name}
 								>

@@ -37,19 +37,11 @@ async function generateUserData() {
 		})
 		.map((member) => ({
 			id: member.id,
-			name: member.name,
-			real_name: member.real_name,
-			title: member.profile.title,
-			status_text: member.profile.status_text,
-			status_emoji: member.profile.status_emoji,
-			status_expiration: member.profile.status_expiration,
-			email: member.profile.email,
-			huddle_state: member.profile.huddle_state,
-			first_name: member.profile.first_name,
-			last_name: member.profile.last_name,
-			image_192: member.profile.image_192,
+			first_name:
+				member.profile.display_name_normalized.split(" ")[0] ||
+				member.profile.first_name,
 			image_512: member.profile.image_512,
-			image_1024: member.profile.image_1024,
+			status: "future",
 		}));
 
 	const outputFilePath = path.join(process.cwd(), "app", "data.json");

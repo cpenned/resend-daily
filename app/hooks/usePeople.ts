@@ -5,19 +5,8 @@ import { useState, useCallback } from "react";
 // Define a type for the person object (ensure this matches data.json structure)
 interface Person {
 	id: string;
-	name: string;
-	real_name: string;
-	title: string;
-	status_text: string;
-	status_emoji: string;
-	status_expiration: number;
-	email: string;
-	huddle_state: string;
 	first_name: string;
-	last_name: string;
-	image_192: string;
 	image_512: string;
-	image_1024: string;
 	status: "future" | "active" | "upNext" | "done";
 }
 
