@@ -10,6 +10,7 @@ const theme = {
 	Jonni: "purple",
 	Cassio: "dracula",
 	Anna: "rainbow",
+	Brian: "jazz",
 };
 export default function Home() {
 	const { documents } = useCollection("people");

@@ -112,31 +112,31 @@ body {
 		--chart-4: 310 70% 60%;
 		--chart-5: 230 70% 60%;
 	}
-	.rainbow {
-		--background: 326, 100%, 74%;
-		--foreground: 270 50% 40%;
-		--card: 0 0% 98%;
-		--card-foreground: 0 0% 0%;
-		--popover: 0 0% 98%;
-		--popover-foreground: 0 0% 0%;
-		--primary: 0 100% 50%;
-		--primary-foreground: 0 0% 100%;
-		--secondary: 120 100% 50%;
-		--secondary-foreground: 0 0% 100%;
-		--muted: 240 100% 50%;
-		--muted-foreground: 0 0% 100%;
-		--accent: 60 100% 50%;
-		--accent-foreground: 0 0% 0%;
-		--destructive: 0 100% 50%;
-		--destructive-foreground: 0 0% 100%;
-		--border: 180 100% 50%;
-		--input: 300 100% 50%;
-		--ring: 0 100% 50%;
-		--chart-1: 0 100% 50%;
-		--chart-2: 120 100% 50%;
-		--chart-3: 240 100% 50%;
-		--chart-4: 60 100% 50%;
-		--chart-5: 300 100% 50%;
+	.jazz {
+		--background: 0 0% 0%; /* Black */
+		--foreground: 0 0% 100%; /* White */
+		--card: 0 0% 100%; /* White */
+		--card-foreground: 0 0% 0%; /* Black */
+		--popover: 0 0% 100%; /* White */
+		--popover-foreground: 0 0% 0%; /* Black */
+		--primary: 60 100% 50%; /* Yellow */
+		--primary-foreground: 0 0% 0%; /* Black */
+		--secondary: 0 100% 50%; /* Red */
+		--secondary-foreground: 0 0% 100%; /* White */
+		--muted: 240 100% 50%; /* Blue */
+		--muted-foreground: 0 0% 100%; /* White */
+		--accent: 120 100% 25%; /* Dark Green */
+		--accent-foreground: 0 0% 100%; /* White */
+		--destructive: 0 100% 50%; /* Red */
+		--destructive-foreground: 0 0% 100%; /* White */
+		--border: 0 0% 20%; /* Dark Gray */
+		--input: 0 0% 80%; /* Light Gray */
+		--ring: 60 100% 50%; /* Yellow */
+		--chart-1: 60 100% 50%; /* Yellow */
+		--chart-2: 0 100% 50%; /* Red */
+		--chart-3: 240 100% 50%; /* Blue */
+		--chart-4: 120 100% 25%; /* Dark Green */
+		--chart-5: 300 100% 50%; /* Purple */
 	}
 }
 
